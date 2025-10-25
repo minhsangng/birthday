@@ -1,4 +1,5 @@
 document.getElementById("content").style.display = "none";
+document.getElementById("result").style.display = "none";
 
 var sf = new Snowflakes({
     color: "#ffd700",
@@ -742,20 +743,20 @@ function onPointerUp(e) {
         if (px >= L.x && px <= L.x + L.w && py >= L.y && py <= L.y + L.h) {
             scene.lighter.flameOn = !scene.lighter.flameOn;
 
-            setTimeout(() => { scene.lighter.visible = false; }, 500);
+            setTimeout(() => { scene.lighter.visible = false; }, 250);
 
             setTimeout(() => {
                 $(".loader").fadeOut(1500);
                 $(".main").fadeIn("slow");
                 $(".balloon-border").animate({
                     top: -500
-                }, 12000);
+                }, 8000);
                 var audio = $(".song")[0];
                 audio.play();
 
                 document.getElementById("content").style.display = "block";
                 sf.destroy();
-            }, 2000);
+            }, 1500);
         }
     }
     if (e.pointerId) {
@@ -782,7 +783,7 @@ window.addEventListener('orientationchange', () => { setTimeout(() => { resize()
 /* Scroll Page */
 let currentScroll = 0;
 let isScrolling = false;
-const step = window.innerHeight; // mỗi lần cuộn đúng 100vh
+const step = window.innerHeight;
 
 function scrollToStep() {
     window.scrollTo({
@@ -796,12 +797,11 @@ window.addEventListener("wheel", (e) => {
     isScrolling = true;
 
     if (e.deltaY > 0) {
-        currentScroll += step; // cuộn xuống
+        currentScroll += step;
     } else {
-        currentScroll -= step; // cuộn lên
+        currentScroll -= step;
     }
 
-    // Giới hạn trong phạm vi trang
     currentScroll = Math.max(0, Math.min(currentScroll, document.body.scrollHeight - step));
 
     scrollToStep();
@@ -811,7 +811,6 @@ window.addEventListener("wheel", (e) => {
     }, 800);
 });
 
-// --- Mobile vuốt ---
 let startY = 0;
 window.addEventListener("touchstart", e => startY = e.touches[0].clientY);
 window.addEventListener("touchend", e => {
@@ -831,9 +830,6 @@ window.addEventListener("touchend", e => {
         isScrolling = false;
     }, 800);
 });
-
-
-
 
 /* Check-in */
 let photoLists = [];
@@ -864,18 +860,34 @@ function StartCamera(video, canvas, snap, img) {
 
     cam.start().then(() => {
         snap.onclick = () => {
-            let picture = cam.snap();
+            if (snap.textContent == "Chụp") {
+                let picture = cam.snap();
 
-            video.style.display = "none";
-            snapBtn.style.display = "none";
-            canvasPhoto.style.display = "none";
-            img.style.display = "block";
+                video.style.display = "none";
+                snapBtn.style.display = "none";
+                canvasPhoto.style.display = "none";
+                img.style.display = "block";
 
-            img.src = picture;
-            img.style.display = "block";
-            photoLists.push(picture);
+                img.src = picture;
+                img.style.display = "block";
 
-            PrintImage();
+                if (!photoLists.includes(picture))
+                    photoLists.push(picture);
+
+                document.getElementById("result").style.display = "block";
+
+                PrintImage();
+
+                setTimeout(() => {
+                    checkinBtn.textContent = "Chụp tiếp";
+                    img.style.display = "none";
+                    checkinBtn.style.display = "block";
+                    video.style.display = "block";
+                    canvasPhoto.style.display = "block";
+                }, 1200);
+            } else if (snap.textContent == "Chụp tiếp") {
+                snap.textContent = "Chụp";
+            }
         }
     }).catch(err => {
         console.log(err);
@@ -883,6 +895,8 @@ function StartCamera(video, canvas, snap, img) {
 }
 
 function PrintImage() {
+    console.log(photoLists);
+    result.innerHTML = "";
     if (photoLists.length > 0) {
         photoLists.forEach((p, i) => {
             let img = document.createElement("img");
