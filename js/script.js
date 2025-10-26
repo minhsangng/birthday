@@ -1,5 +1,6 @@
 document.getElementById("content").style.display = "none";
 document.getElementById("result").style.display = "none";
+document.getElementById("resultImage").style.display = "none";
 
 var sf = new Snowflakes({
     color: "#ffd700",
@@ -838,7 +839,7 @@ const video = document.getElementById("cam");
 const canvasPhoto = document.getElementById("canvasPhoto");
 const snapBtn = document.getElementById("snapBtn");
 const img = document.getElementById("photo");
-const result = document.querySelector("#result div");
+const result = document.querySelector("#photobooth");
 
 video.style.display = "none";
 snapBtn.style.display = "none";
@@ -859,6 +860,7 @@ function StartCamera(video, canvas, snap, img) {
     const cam = new Webcam(video, "user", canvas);
 
     cam.start().then(() => {
+
         snap.onclick = () => {
             if (snap.textContent == "Chụp") {
                 let picture = cam.snap();
@@ -874,7 +876,7 @@ function StartCamera(video, canvas, snap, img) {
                 if (!photoLists.includes(picture))
                     photoLists.push(picture);
 
-                document.getElementById("result").style.display = "block";
+                document.getElementById("result").style.display = "flex";
 
                 PrintImage();
 
@@ -895,7 +897,6 @@ function StartCamera(video, canvas, snap, img) {
 }
 
 function PrintImage() {
-    console.log(photoLists);
     result.innerHTML = "";
     if (photoLists.length > 0) {
         photoLists.forEach((p, i) => {
@@ -904,10 +905,48 @@ function PrintImage() {
 
             result.appendChild(img);
         });
+
+        if (photoLists.length >= 4) {
+            setTimeout(() => {
+                PrintPhotoBooth();
+            }, 300);
+        }
     } else {
         for (let i = 0; i < 4; i++) {
             let img = document.createElement("img");
             result.appendChild(img);
         }
     }
+}
+
+async function PrintPhotoBooth() {
+    document.getElementById("resultImage").style.display = "block";
+    const booth = document.getElementById("photobooth");
+    const resultImg = document.querySelector("#resultImage img");
+
+    const imgs = booth.querySelectorAll("img");
+    const promises = Array.from(imgs).map(img => {
+        img.crossOrigin = "anonymous";
+        return new Promise(resolve => {
+            if (img.complete) resolve();
+            else img.onload = img.onerror = resolve;
+        });
+    });
+
+    await Promise.all(promises);
+
+    html2canvas(booth, { scale: 2, useCORS: true }).then(canvas => {
+        const imgData = canvas.toDataURL("image/png");
+
+        if (resultImg) {
+            resultImg.src = imgData;
+        } else {
+            console.warn("Không tìm thấy phần tử #resultImage img để hiển thị kết quả");
+        }
+
+        const link = document.createElement("a");
+        link.href = imgData;
+        link.download = "photobooth.png";
+        link.click();
+    });
 }

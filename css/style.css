@@ -113,6 +113,10 @@ canvas {
     z-index: 998;
 }
 
+#cam {
+    object-fit: cover;
+}
+
 #canvasPhoto {
     position: absolute;
     top: -100%;
@@ -122,23 +126,30 @@ canvas {
 #result {
     width: 100vw;
     height: 100vh;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
 }
 
-#result div {
+#result #photobooth {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-self: center;
     border: 2px solid #0b1020;
     border-radius: 8px;
-    height: 100vh;
-    padding: 0 .5rem;
+    height: auto;
+    width: auto;
+    margin: auto 0;
 }
 
-#result div img {
-    padding: .25rem .75rem;
+#result #photobooth img {
+    padding: .5rem .75rem;
     background-color: #fff8e6;
     height: 24vh;
+    width: 50vw;
+    object-fit: cover;
+    margin: 0 auto;
 }
 
 #result div img:first-child {
@@ -151,6 +162,18 @@ canvas {
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
     padding-bottom: .75rem;
+}
+
+#resultImage {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 8px;
+}
+
+#resultImage img {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
 }
 
 .loader {
