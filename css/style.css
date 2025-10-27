@@ -9,7 +9,7 @@
 }
 
 @font-face {
-    font-family: "DFVN-Modak";
+    font-family: "Modak";
     src: url("../asset/DFVN-Modak.ttf") format("truetype");
 }
 
@@ -74,6 +74,7 @@ canvas {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    position: relative;
 }
 
 #content main .part div {
@@ -83,10 +84,22 @@ canvas {
     align-items: center;
 }
 
+.count {
+    position: absolute;
+    top: 10%;
+    right: 5%;
+    background-color: #f6b3c2;
+    border-radius: 50%;
+    padding: 1rem 2rem .75rem;
+    font: 2rem "Modak";
+    z-index: 999;
+}
+
 #content h2 {
-    font-family: "DFVN-Modak";
+    font-family: "Modak";
     font-size: 2.5rem;
     margin-bottom: 5rem;
+    color: #C4515C;
 }
 
 #checkinBtn,
@@ -95,7 +108,7 @@ canvas {
     border-radius: 12px;
     font-size: 1.5rem;
     line-height: 1.15em;
-    font-family: "DFVN-Modak";
+    font-family: "Modak";
     z-index: 999;
 }
 
@@ -136,7 +149,6 @@ canvas {
     flex-direction: column;
     justify-content: center;
     align-self: center;
-    border: 2px solid #0b1020;
     border-radius: 8px;
     height: auto;
     width: auto;
@@ -168,6 +180,7 @@ canvas {
     width: 100vw;
     height: 100vh;
     border-radius: 8px;
+    overflow: hidden;
 }
 
 #resultImage img {

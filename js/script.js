@@ -840,11 +840,13 @@ const canvasPhoto = document.getElementById("canvasPhoto");
 const snapBtn = document.getElementById("snapBtn");
 const img = document.getElementById("photo");
 const result = document.querySelector("#photobooth");
+const count = document.querySelector(".count");
 
 video.style.display = "none";
 snapBtn.style.display = "none";
 canvasPhoto.style.display = "none";
 img.style.display = "none";
+count.style.display = "none";
 
 checkinBtn.onclick = () => {
     video.style.display = "block";
@@ -855,6 +857,8 @@ checkinBtn.onclick = () => {
     document.querySelector(".main").style.zIndex = "1";
     StartCamera(video, canvasPhoto, snapBtn, img);
 }
+
+let index = 0;
 
 function StartCamera(video, canvas, snap, img) {
     const cam = new Webcam(video, "user", canvas);
@@ -869,6 +873,10 @@ function StartCamera(video, canvas, snap, img) {
                 snapBtn.style.display = "none";
                 canvasPhoto.style.display = "none";
                 img.style.display = "block";
+                count.style.display = "block";
+
+                index++;
+                count.textContent = index.toString();
 
                 img.src = picture;
                 img.style.display = "block";
@@ -887,9 +895,8 @@ function StartCamera(video, canvas, snap, img) {
                     video.style.display = "block";
                     canvasPhoto.style.display = "block";
                 }, 1200);
-            } else if (snap.textContent == "Chụp tiếp") {
+            } else if (snap.textContent == "Chụp tiếp")
                 snap.textContent = "Chụp";
-            }
         }
     }).catch(err => {
         console.log(err);
@@ -941,12 +948,14 @@ async function PrintPhotoBooth() {
         if (resultImg) {
             resultImg.src = imgData;
         } else {
-            console.warn("Không tìm thấy phần tử #resultImage img để hiển thị kết quả");
+            console.warn("Không tìm thấy phần tử img để hiển thị kết quả");
         }
 
         const link = document.createElement("a");
         link.href = imgData;
         link.download = "photobooth.png";
         link.click();
+
+        document.getElementById("resultImage").style.display = "none";
     });
 }
