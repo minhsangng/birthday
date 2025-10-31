@@ -1,7 +1,3 @@
-document.getElementById("content").style.display = "none";
-document.getElementById("result").style.display = "none";
-document.getElementById("resultImage").style.display = "none";
-
 var sf = new Snowflakes({
     color: "#ffd700",
     minSize: 20
@@ -834,6 +830,7 @@ window.addEventListener("touchend", e => {
 
 /* Check-in */
 let photoLists = [];
+
 const checkinBtn = document.getElementById("checkinBtn");
 const video = document.getElementById("cam");
 const canvasPhoto = document.getElementById("canvasPhoto");
@@ -881,12 +878,18 @@ function StartCamera(video, canvas, snap, img) {
                 img.src = picture;
                 img.style.display = "block";
 
-                if (!photoLists.includes(picture))
+                if (!photoLists.includes(picture)) {
                     photoLists.push(picture);
 
-                document.getElementById("result").style.display = "flex";
+                    if (photoLists.length >= 4) {
+                        checkinBtn.style.display = "none";
+                        snap.style.display = "none";
+                    }
+                }
 
-                PrintImage();
+                document.getElementById("result").style.display = "grid";
+
+                PrintImage(document.querySelector("#photobooth .col1"), document.querySelector("#photobooth .col2"));
 
                 setTimeout(() => {
                     checkinBtn.textContent = "Chụp tiếp";
@@ -903,26 +906,41 @@ function StartCamera(video, canvas, snap, img) {
     })
 }
 
-function PrintImage() {
-    result.innerHTML = "";
+function PrintImage(col1, col2) {
+    col1.innerHTML = "";
     if (photoLists.length > 0) {
         photoLists.forEach((p, i) => {
             let img = document.createElement("img");
             img.src = p;
 
-            result.appendChild(img);
+            col1.appendChild(img);
         });
-
-        if (photoLists.length >= 4) {
-            setTimeout(() => {
-                PrintPhotoBooth();
-            }, 300);
-        }
     } else {
         for (let i = 0; i < 4; i++) {
             let img = document.createElement("img");
-            result.appendChild(img);
+            col1.appendChild(img);
         }
+    }
+
+    col2.innerHTML = "";
+    if (photoLists.length > 0) {
+        photoLists.forEach((p, i) => {
+            let img = document.createElement("img");
+            img.src = p;
+
+            col2.appendChild(img);
+        });
+    } else {
+        for (let i = 0; i < 4; i++) {
+            let img = document.createElement("img");
+            col2.appendChild(img);
+        }
+    }
+
+    if (photoLists.length >= 4) {
+        setTimeout(() => {
+            PrintPhotoBooth();
+        }, 300);
     }
 }
 
@@ -953,7 +971,7 @@ async function PrintPhotoBooth() {
 
         const link = document.createElement("a");
         link.href = imgData;
-        link.download = "photobooth.png";
+        link.download = "mayns21stbirthday.png";
         link.click();
 
         document.getElementById("resultImage").style.display = "none";

@@ -58,6 +58,7 @@ canvas {
     padding: 0;
     z-index: 9999 !important;
     position: relative;
+    display: none;
 }
 
 #content main {
@@ -130,6 +131,10 @@ canvas {
     object-fit: cover;
 }
 
+#photo {
+    object-fit: cover;
+}
+
 #canvasPhoto {
     position: absolute;
     top: -100%;
@@ -142,26 +147,36 @@ canvas {
     padding: 0;
     justify-content: center;
     align-items: center;
+    display: none;
 }
 
 #result #photobooth {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    border-radius: 8px;
+    height: 100vh;
+    width: 100vw;
+    margin: auto 0;
+    position: relative;
+}
+
+#photobooth .col1,
+#photobooth .col2 {
+    -ms-grid-row-span: 4;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-self: center;
-    border-radius: 8px;
-    height: auto;
-    width: auto;
-    margin: auto 0;
+    align-items: center;
 }
 
 #result #photobooth img {
     padding: .5rem .75rem;
     background-color: #fff8e6;
-    height: 24vh;
-    width: 50vw;
     object-fit: cover;
     margin: 0 auto;
+    width: 50vw;
+    height: 25vh;
 }
 
 #result div img:first-child {
@@ -176,11 +191,41 @@ canvas {
     padding-bottom: .75rem;
 }
 
+#nameTxt,
+#messageTxt {
+    position: absolute;
+    top: 25%;
+    left: -0.5%;
+    width: 100%;
+    transform: rotate(90deg);
+    color: #00000033;
+    text-transform: uppercase;
+    font: 2.2rem "Modak";
+    letter-spacing: 1.1rem;
+    z-index: 999;
+}
+
+#messageTxt {
+    top: 70%;
+    left: 1%;
+    transform: rotate(-90deg);
+}
+
+#line {
+    position: absolute;
+    height: 20vh;
+    border-radius: 2px;
+    border: 4px dotted #00000033;
+    top: 40%;
+    left: 49%;
+}
+
 #resultImage {
     width: 100vw;
     height: 100vh;
     border-radius: 8px;
     overflow: hidden;
+    display: none;
 }
 
 #resultImage img {
