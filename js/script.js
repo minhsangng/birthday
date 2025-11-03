@@ -886,6 +886,7 @@ function StartCamera(video, canvas, snap, img) {
                     if (photoLists.length >= 4) {
                         checkinBtn.style.display = "none";
                         snap.style.display = "none";
+                        cam.stop();
                     }
                 }
 
@@ -932,10 +933,12 @@ function PrintImage(col1, col2) {
     }
 
     if (photoLists.length >= 4) {
+        result.style.display = "grid";
         setTimeout(() => {
             PrintPhotoBooth();
         }, 500);
-    }
+    } else
+        result.style.display = "none";
 }
 
 async function PrintPhotoBooth() {
@@ -986,15 +989,17 @@ async function PrintPhotoBooth() {
 
 function ResetCheckin() {
     document.getElementById("content").style.display = "block";
+    document.getElementById("content").style.display = "none";
     document.getElementById("resultImage").style.display = "none";
-    document.querySelectorAll("#resultImage img").forEach((img) => {
-        img.remove();
-    });
+    document.querySelector(".col1").innerHTML = "";
+    document.querySelector(".col2").innerHTML = "";
 
-    index = 0;
+    index = 1;
     count.textContent = index.toString();
 
     photoLists = [];
+
+    StartCamera(video, canvasPhoto, snapBtn, img);
 
     window.location.href = "#content";
 }
