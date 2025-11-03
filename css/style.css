@@ -207,8 +207,21 @@ canvas {
 
 #messageTxt {
     top: 70%;
-    left: 1%;
+    left: 0.6%;
     transform: rotate(-90deg);
+}
+
+#result .download,
+#result .reset {
+    position: absolute;
+    top: 52%;
+    left: 38%;
+    color: red;
+    font: 2rem "Modak";
+}
+
+#result .reset {
+    top: 45%;
 }
 
 #line {

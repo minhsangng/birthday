@@ -750,10 +750,12 @@ function onPointerUp(e) {
                 }, 8000);
                 var audio = $(".song")[0];
                 audio.play();
-
-                document.getElementById("content").style.display = "block";
                 sf.destroy();
             }, 1500);
+
+            setTimeout(() => {
+                document.getElementById("content").style.display = "block";
+            }, 6000);
         }
     }
     if (e.pointerId) {
@@ -908,47 +910,39 @@ function StartCamera(video, canvas, snap, img) {
 
 function PrintImage(col1, col2) {
     col1.innerHTML = "";
-    if (photoLists.length > 0) {
-        photoLists.forEach((p, i) => {
-            let img = document.createElement("img");
-            img.src = p;
-
-            col1.appendChild(img);
-        });
-    } else {
-        for (let i = 0; i < 4; i++) {
-            let img = document.createElement("img");
-            col1.appendChild(img);
-        }
-    }
-
     col2.innerHTML = "";
-    if (photoLists.length > 0) {
-        photoLists.forEach((p, i) => {
-            let img = document.createElement("img");
-            img.src = p;
 
-            col2.appendChild(img);
+    if (photoLists.length > 0) {
+        photoLists.forEach(p => {
+            const img1 = document.createElement("img");
+            img1.src = p;
+            col1.appendChild(img1);
+
+            const img2 = document.createElement("img");
+            img2.src = p;
+            col2.appendChild(img2);
         });
     } else {
         for (let i = 0; i < 4; i++) {
-            let img = document.createElement("img");
-            col2.appendChild(img);
+            const img1 = document.createElement("img");
+            const img2 = document.createElement("img");
+            col1.appendChild(img1);
+            col2.appendChild(img2);
         }
     }
 
     if (photoLists.length >= 4) {
         setTimeout(() => {
             PrintPhotoBooth();
-        }, 300);
+        }, 500);
     }
 }
 
 async function PrintPhotoBooth() {
+    document.getElementById("content").style.display = "none";
     document.getElementById("resultImage").style.display = "block";
     const booth = document.getElementById("photobooth");
     const resultImg = document.querySelector("#resultImage img");
-
     const imgs = booth.querySelectorAll("img");
     const promises = Array.from(imgs).map(img => {
         img.crossOrigin = "anonymous";
@@ -969,11 +963,38 @@ async function PrintPhotoBooth() {
             console.warn("Không tìm thấy phần tử img để hiển thị kết quả");
         }
 
-        const link = document.createElement("a");
-        link.href = imgData;
-        link.download = "mayns21stbirthday.png";
-        link.click();
+        let downloadBtn = document.createElement("a");
+        downloadBtn.classList.add("download");
+        downloadBtn.textContent = "Tải ảnh";
+        downloadBtn.href = imgData;
+        downloadBtn.download = "mayns21stbirthday.png";
+        result.appendChild(downloadBtn);
+
+        let resetBtn = document.createElement("a");
+        resetBtn.classList.add("reset");
+        resetBtn.textContent = "Chụp lại"
+
+        resetBtn.onclick = (e) => {
+            ResetCheckin();
+        }
+
+        result.appendChild(resetBtn);
 
         document.getElementById("resultImage").style.display = "none";
     });
+}
+
+function ResetCheckin() {
+    document.getElementById("content").style.display = "block";
+    document.getElementById("resultImage").style.display = "none";
+    document.querySelectorAll("#resultImage img").forEach((img) => {
+        img.remove();
+    });
+
+    index = 0;
+    count.textContent = index.toString();
+
+    photoLists = [];
+
+    window.location.href = "#content";
 }
